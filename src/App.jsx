@@ -1,4 +1,3 @@
-import HoverBox from './components/HoverBox'
 import Scores from './components/Scores'
 import Connect4 from './components/connect-4'
 
