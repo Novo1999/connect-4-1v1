@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import HoverBox from './HoverBox'
 
 // column
@@ -13,6 +13,8 @@ const col7 = col1.map(item => item + 6)
 const Connect4 = () => {
   const [currentHoveredColumn, setCurrentHoveredColumn] = useState(null)
   const [currentPlayer, setCurrentPlayer] = useState(1)
+  const [currentHoverColor, setCurrentHoverColor] = useState('bg-red-600')
+  const [currentFilledColumns, setCurrentFilledColumns] = useState([])
 
   // creating new columns based on clicks
   const [column1, setColumn1] = useState([])
@@ -33,11 +35,20 @@ const Connect4 = () => {
     ...column7,
   ]
 
+  const columnNumCounts = wholeConnectFour.reduce((counts, item) => {
+    const { columnNum } = item
+    counts[columnNum] = (counts[columnNum] || 0) + 1
+    return counts
+  }, {})
+
+  // check if any column already full
+
   function currentColumn(referenceColumn, newColumn, columnSetter) {
     referenceColumn.map(item => {
       if (!newColumn.map(el => el.colorNum).includes(item)) {
         const newColumnCopy = [...newColumn]
         newColumnCopy.push({
+          columnNum: currentHoveredColumn,
           colorNum: item,
           color: currentPlayer === 1 ? 'bg-red-600' : 'bg-yellow-600',
         })
@@ -46,14 +57,21 @@ const Connect4 = () => {
     })
   }
 
+  useEffect(() => {
+    if (currentPlayer === 1) {
+      setCurrentHoverColor('bg-red-600')
+    }
+    if (currentPlayer === 2) {
+      setCurrentHoverColor('bg-yellow-600')
+    }
+  }, [currentPlayer])
+
   function addCircleToColumn(currentHovered) {
-    switch (currentPlayer) {
-      case 1:
-        setCurrentPlayer(2)
-        break
-      case 2:
-        setCurrentPlayer(1)
-        break
+    if (currentPlayer === 1) {
+      setCurrentPlayer(2)
+    }
+    if (currentPlayer === 2) {
+      setCurrentPlayer(1)
     }
     switch (currentHovered) {
       case 1:
@@ -79,8 +97,6 @@ const Connect4 = () => {
     }
   }
 
-  // FIX COLOR ISSUE
-
   let connectFour = Array.from({ length: 42 }, (_, i) => i + 1).map(item => {
     return { colorNum: item, color: 'bg-slate-700' }
   })
@@ -105,8 +121,8 @@ const Connect4 = () => {
           setCurrentHoveredColumn={setCurrentHoveredColumn}
           currentHoveredColumn={currentHoveredColumn}
           addCircleToColumn={addCircleToColumn}
-          setCurrentPlayer={setCurrentPlayer}
-          currentPlayer={currentPlayer}
+          currentHoverColor={currentHoverColor}
+          setCurrentHoverColor={setCurrentHoverColor}
         />
         {connectFour.map(item => {
           return (
