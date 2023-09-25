@@ -13,6 +13,7 @@ const col7 = col1.map(item => item + 6)
 const Connect4 = () => {
   const [currentHoveredColumn, setCurrentHoveredColumn] = useState(null)
   const [currentPlayer, setCurrentPlayer] = useState(1)
+
   // creating new columns based on clicks
   const [column1, setColumn1] = useState([])
   const [column2, setColumn2] = useState([])
@@ -34,9 +35,12 @@ const Connect4 = () => {
 
   function currentColumn(referenceColumn, newColumn, columnSetter) {
     referenceColumn.map(item => {
-      if (!newColumn.includes(item)) {
+      if (!newColumn.map(el => el.colorNum).includes(item)) {
         const newColumnCopy = [...newColumn]
-        newColumnCopy.push(item)
+        newColumnCopy.push({
+          colorNum: item,
+          color: currentPlayer === 1 ? 'bg-red-600' : 'bg-yellow-600',
+        })
         columnSetter(newColumnCopy)
       }
     })
@@ -75,6 +79,25 @@ const Connect4 = () => {
     }
   }
 
+  // FIX COLOR ISSUE
+
+  let connectFour = Array.from({ length: 42 }, (_, i) => i + 1).map(item => {
+    return { colorNum: item, color: 'bg-slate-700' }
+  })
+
+  // console.log(wholeConnectFour)
+
+  connectFour.map(item1 => {
+    const match = wholeConnectFour.find(
+      item2 => item2.colorNum === item1.colorNum
+    )
+    if (match) {
+      item1.color = match.color
+    }
+  })
+
+  // console.log(connectFour)
+
   return (
     <>
       <div className='bg-blue-500 rounded-xl w-[70rem] h-[40rem] m-auto relative top-40 bottom-0 p-3 grid grid-cols-7 grid-rows-6'>
@@ -83,17 +106,17 @@ const Connect4 = () => {
           currentHoveredColumn={currentHoveredColumn}
           addCircleToColumn={addCircleToColumn}
           setCurrentPlayer={setCurrentPlayer}
+          currentPlayer={currentPlayer}
         />
-        {Array.from({ length: 42 }, (_, i) => i + 1).map(item => (
-          <div
-            key={item}
-            className={`w-24 h-24 m-auto bg-slate-700 rounded-full cursor-pointer ${
-              wholeConnectFour.includes(item) &&
-              currentPlayer === 1 &&
-              'bg-red-600'
-            }`}
-          ></div>
-        ))}
+        {connectFour.map(item => {
+          return (
+            <div
+              key={item.colorNum}
+              className={`w-24 h-24 m-auto ${item.color}
+                 rounded-full`}
+            ></div>
+          )
+        })}
       </div>
     </>
   )
