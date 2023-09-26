@@ -1,6 +1,38 @@
 import { useContext, useEffect, useState } from 'react'
 import { PlayerContext } from '../App'
-import { col1, col2, col3, col4, col5, col6, col7 } from '../utils/constant'
+import {
+  col1,
+  col2,
+  col3,
+  col4,
+  col5,
+  col6,
+  col7,
+  rowWin1,
+  rowWin2,
+  rowWin3,
+  rowWin4,
+  rowWin5,
+  rowWin6,
+  rowWin7,
+  rowWin8,
+  rowWin9,
+  rowWin10,
+  rowWin11,
+  rowWin12,
+  rowWin13,
+  rowWin14,
+  rowWin15,
+  rowWin16,
+  rowWin17,
+  rowWin18,
+  rowWin19,
+  rowWin20,
+  rowWin21,
+  rowWin22,
+  rowWin23,
+  rowWin24,
+} from '../utils/constant'
 
 export function useColumns() {
   const { currentPlayer, setCurrentPlayer, winner, setWinner } =
@@ -30,7 +62,65 @@ export function useColumns() {
     ...column6,
     ...column7,
   ]
-  console.log(wholeConnectFour)
+
+  function areAllItemsSame(arr) {
+    const firstItem = arr[0]
+
+    if (arr.length === 0 || arr.length === 1) return false
+
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i] !== firstItem) {
+        return false
+      }
+    }
+    setWinner(currentPlayer === 2 ? 1 : 2)
+  }
+
+  // checking row wins
+  useEffect(() => {
+    function checkRowWins(row) {
+      let matchedRow
+      const matched = row.every(num =>
+        wholeConnectFour.some(item => item.colorNum === num)
+      )
+      if (matched) {
+        matchedRow = row.map(num => {
+          const match = wholeConnectFour.find(obj => obj.colorNum === num)
+          return match ? match.color : null
+        })
+      }
+      return areAllItemsSame(matchedRow || [])
+    }
+    checkRowWins(rowWin1)
+    checkRowWins(rowWin2)
+    checkRowWins(rowWin3)
+    checkRowWins(rowWin4)
+    checkRowWins(rowWin5)
+    checkRowWins(rowWin6)
+    checkRowWins(rowWin7)
+    checkRowWins(rowWin8)
+    checkRowWins(rowWin9)
+    checkRowWins(rowWin10)
+    checkRowWins(rowWin11)
+    checkRowWins(rowWin12)
+    checkRowWins(rowWin13)
+    checkRowWins(rowWin14)
+    checkRowWins(rowWin15)
+    checkRowWins(rowWin16)
+    checkRowWins(rowWin17)
+    checkRowWins(rowWin18)
+    checkRowWins(rowWin19)
+    checkRowWins(rowWin20)
+    checkRowWins(rowWin21)
+    checkRowWins(rowWin22)
+    checkRowWins(rowWin23)
+    checkRowWins(rowWin24)
+  }, [currentPlayer, setWinner])
+
+  // const result = rowWin21.every(val => colorNums.includes(val))
+
+  console.log(winner)
+
   // adding which column is full
   function addToCurrentFilledColumns(columnNum) {
     if (columnNumCounts[columnNum] === 5) {
@@ -66,10 +156,10 @@ export function useColumns() {
   // determining the winner
   useEffect(() => {
     if (totalColor.red === 4) {
-      setWinner('red')
+      setWinner(1)
     }
     if (totalColor.yellow === 4) {
-      setWinner('yellow')
+      setWinner(2)
     }
   }, [setWinner, totalColor])
 
