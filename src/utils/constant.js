@@ -7,11 +7,6 @@ const col5 = col1.map(item => item + 4)
 const col6 = col1.map(item => item + 5)
 const col7 = col1.map(item => item + 6)
 
-// creating the board
-let connectFour = Array.from({ length: 42 }, (_, i) => i + 1).map(item => {
-  return { colorNum: item, color: 'bg-slate-700' }
-})
-
 // win conditions lel
 
 // Row Wins
@@ -39,6 +34,32 @@ const rowWin21 = [1, 2, 3, 4].map(num => num + 35)
 const rowWin22 = [2, 3, 4, 5].map(num => num + 35)
 const rowWin23 = [3, 4, 5, 6].map(num => num + 35)
 const rowWin24 = [4, 5, 6, 7].map(num => num + 35)
+
+// Diagonal Win
+const diagonalWin1 = [4, 10, 16, 22]
+const diagonalWin2 = [5, 11, 17, 23]
+const diagonalWin3 = [11, 17, 23, 29]
+const diagonalWin4 = [6, 12, 18, 24]
+const diagonalWin5 = [12, 18, 24, 30]
+const diagonalWin6 = [18, 24, 30, 36]
+const diagonalWin7 = [7, 13, 19, 25]
+const diagonalWin8 = [13, 19, 25, 31]
+const diagonalWin9 = [19, 25, 31, 37]
+const diagonalWin10 = [14, 20, 26, 32]
+const diagonalWin11 = [20, 26, 32, 38]
+const diagonalWin12 = [21, 27, 33, 39]
+const diagonalWin13 = [15, 23, 31, 39]
+const diagonalWin14 = [8, 16, 24, 32]
+const diagonalWin15 = [16, 24, 32, 40]
+const diagonalWin16 = [1, 9, 17, 25]
+const diagonalWin17 = [9, 17, 25, 33]
+const diagonalWin18 = [17, 25, 33, 41]
+const diagonalWin19 = [2, 10, 18, 26]
+const diagonalWin20 = [10, 18, 26, 34]
+const diagonalWin21 = [18, 26, 34, 42]
+const diagonalWin22 = [3, 11, 19, 27]
+const diagonalWin23 = [11, 19, 27, 35]
+const diagonalWin24 = [4, 12, 20, 28]
 
 export {
   col1,
@@ -72,7 +93,30 @@ export {
   rowWin22,
   rowWin23,
   rowWin24,
-  connectFour,
+  diagonalWin1,
+  diagonalWin2,
+  diagonalWin3,
+  diagonalWin4,
+  diagonalWin5,
+  diagonalWin6,
+  diagonalWin7,
+  diagonalWin8,
+  diagonalWin9,
+  diagonalWin10,
+  diagonalWin11,
+  diagonalWin12,
+  diagonalWin13,
+  diagonalWin14,
+  diagonalWin15,
+  diagonalWin16,
+  diagonalWin17,
+  diagonalWin18,
+  diagonalWin19,
+  diagonalWin20,
+  diagonalWin21,
+  diagonalWin22,
+  diagonalWin23,
+  diagonalWin24,
 }
 
 /*
@@ -82,9 +126,35 @@ Row wins
 [3,4,5,6] --> add 7,14,21,28,35 with each
 [4,5,6,7] --> add 7,14,21,28,35 with each
 
-*/
 
-/*
 Diagonal
+right to left
+-------------
+[4,10,16,22]
+[5,11,17,23]
+[11,17,23,29]
+[6,12,18,24]
+[12,18,24,30]
+[18,24,30,36]
+[7,13,19,25]
+[13,19,25,31]
+[19,25,31,37]
+[14,20,26,32]
+[20,26,32,38]
+[21,27,33,39]
 
+left to right
+-------------
+[15,23,31,39]
+[8,16,24,32]
+[16,24,32,40]
+[1,9,17,25]
+[9,17,25,33]
+[17,25,33,41]
+[2,10,18,26]
+[10,18,26,34]
+[18,26,34,42]
+[3,11,19,27]
+[11,19,27,35]
+[4,12,20,28]
 */

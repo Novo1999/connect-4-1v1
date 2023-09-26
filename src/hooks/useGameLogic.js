@@ -32,9 +32,33 @@ import {
   rowWin22,
   rowWin23,
   rowWin24,
+  diagonalWin1,
+  diagonalWin2,
+  diagonalWin3,
+  diagonalWin4,
+  diagonalWin5,
+  diagonalWin6,
+  diagonalWin7,
+  diagonalWin8,
+  diagonalWin9,
+  diagonalWin10,
+  diagonalWin11,
+  diagonalWin12,
+  diagonalWin13,
+  diagonalWin14,
+  diagonalWin15,
+  diagonalWin16,
+  diagonalWin17,
+  diagonalWin18,
+  diagonalWin19,
+  diagonalWin20,
+  diagonalWin21,
+  diagonalWin22,
+  diagonalWin23,
+  diagonalWin24,
 } from '../utils/constant'
 
-export function useColumns() {
+export function useGameLogic() {
   const { currentPlayer, setCurrentPlayer, winner, setWinner } =
     useContext(PlayerContext)
   const [currentHoveredColumn, setCurrentHoveredColumn] = useState(null)
@@ -42,6 +66,11 @@ export function useColumns() {
   const [currentFilledColumns, setCurrentFilledColumns] = useState([])
 
   const [totalColor, setTotalColor] = useState({ red: 0, yellow: 0 })
+
+  // creating the board
+  let connectFour = Array.from({ length: 42 }, (_, i) => i + 1).map(item => {
+    return { colorNum: item, color: 'bg-slate-700' }
+  })
 
   // filling the columns based on clicks
   const [column1, setColumn1] = useState([])
@@ -53,7 +82,7 @@ export function useColumns() {
   const [column7, setColumn7] = useState([])
 
   // All columns combined
-  const wholeConnectFour = [
+  let wholeConnectFour = [
     ...column1,
     ...column2,
     ...column3,
@@ -78,7 +107,7 @@ export function useColumns() {
 
   // checking row wins
   useEffect(() => {
-    function checkRowWins(row) {
+    function checkWins(row) {
       let matchedRow
       const matched = row.every(num =>
         wholeConnectFour.some(item => item.colorNum === num)
@@ -91,30 +120,54 @@ export function useColumns() {
       }
       return areAllItemsSame(matchedRow || [])
     }
-    checkRowWins(rowWin1)
-    checkRowWins(rowWin2)
-    checkRowWins(rowWin3)
-    checkRowWins(rowWin4)
-    checkRowWins(rowWin5)
-    checkRowWins(rowWin6)
-    checkRowWins(rowWin7)
-    checkRowWins(rowWin8)
-    checkRowWins(rowWin9)
-    checkRowWins(rowWin10)
-    checkRowWins(rowWin11)
-    checkRowWins(rowWin12)
-    checkRowWins(rowWin13)
-    checkRowWins(rowWin14)
-    checkRowWins(rowWin15)
-    checkRowWins(rowWin16)
-    checkRowWins(rowWin17)
-    checkRowWins(rowWin18)
-    checkRowWins(rowWin19)
-    checkRowWins(rowWin20)
-    checkRowWins(rowWin21)
-    checkRowWins(rowWin22)
-    checkRowWins(rowWin23)
-    checkRowWins(rowWin24)
+    checkWins(rowWin1)
+    checkWins(rowWin2)
+    checkWins(rowWin3)
+    checkWins(rowWin4)
+    checkWins(rowWin5)
+    checkWins(rowWin6)
+    checkWins(rowWin7)
+    checkWins(rowWin8)
+    checkWins(rowWin9)
+    checkWins(rowWin10)
+    checkWins(rowWin11)
+    checkWins(rowWin12)
+    checkWins(rowWin13)
+    checkWins(rowWin14)
+    checkWins(rowWin15)
+    checkWins(rowWin16)
+    checkWins(rowWin17)
+    checkWins(rowWin18)
+    checkWins(rowWin19)
+    checkWins(rowWin20)
+    checkWins(rowWin21)
+    checkWins(rowWin22)
+    checkWins(rowWin23)
+    checkWins(rowWin24)
+    checkWins(diagonalWin1)
+    checkWins(diagonalWin2)
+    checkWins(diagonalWin3)
+    checkWins(diagonalWin4)
+    checkWins(diagonalWin5)
+    checkWins(diagonalWin6)
+    checkWins(diagonalWin7)
+    checkWins(diagonalWin8)
+    checkWins(diagonalWin9)
+    checkWins(diagonalWin10)
+    checkWins(diagonalWin11)
+    checkWins(diagonalWin12)
+    checkWins(diagonalWin13)
+    checkWins(diagonalWin14)
+    checkWins(diagonalWin15)
+    checkWins(diagonalWin16)
+    checkWins(diagonalWin17)
+    checkWins(diagonalWin18)
+    checkWins(diagonalWin19)
+    checkWins(diagonalWin20)
+    checkWins(diagonalWin21)
+    checkWins(diagonalWin22)
+    checkWins(diagonalWin23)
+    checkWins(diagonalWin24)
   }, [currentPlayer, setWinner])
 
   // const result = rowWin21.every(val => colorNums.includes(val))
@@ -228,12 +281,14 @@ export function useColumns() {
       currentPlayer === 1 &&
       !currentFilledColumns.includes(currentHoveredColumn)
     ) {
+      if (winner) return
       setCurrentPlayer(2)
     }
     if (
       currentPlayer === 2 &&
       !currentFilledColumns.includes(currentHoveredColumn)
     ) {
+      if (winner) return
       setCurrentPlayer(1)
     }
     // filling the columns
@@ -261,6 +316,21 @@ export function useColumns() {
     }
   }
 
+  // fix reset
+  function resetAll() {
+    setColumn1([])
+    setColumn2([])
+    setColumn3([])
+    setColumn4([])
+    setColumn5([])
+    setColumn6([])
+    setColumn7([])
+    setWinner(null)
+    connectFour = []
+  }
+
+  console.log(connectFour)
+
   return {
     currentHoveredColumn,
     setCurrentHoverColor,
@@ -268,5 +338,7 @@ export function useColumns() {
     currentHoverColor,
     addCircleToColumn,
     wholeConnectFour,
+    resetAll,
+    connectFour,
   }
 }

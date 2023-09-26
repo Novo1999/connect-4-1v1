@@ -2,8 +2,7 @@ import { useContext } from 'react'
 import HoverBox from './HoverBox'
 import { PlayerContext } from '../App'
 import Modal from './Modal'
-import { connectFour } from '../utils/constant'
-import { useColumns } from '../hooks/useColumns'
+import { useGameLogic } from '../hooks/useGameLogic'
 
 const Connect4 = () => {
   const { currentPlayer, winner } = useContext(PlayerContext)
@@ -14,7 +13,8 @@ const Connect4 = () => {
     currentHoverColor,
     addCircleToColumn,
     wholeConnectFour,
-  } = useColumns()
+    connectFour,
+  } = useGameLogic()
 
   // dynamically creating the circles in the connect four
   connectFour.map(item1 => {
@@ -30,7 +30,7 @@ const Connect4 = () => {
 
   return (
     <div className='relative flex items-center justify-center'>
-      {/* <Modal /> */}
+      {winner && <Modal />}
       <div className='bg-blue-500 rounded-xl w-fit h-fit xl:w-[70rem] xl:h-[40rem] m-auto relative top-40 bottom-0 p-3 grid grid-cols-7 grid-rows-6'>
         <HoverBox
           setCurrentHoveredColumn={setCurrentHoveredColumn}
