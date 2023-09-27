@@ -1,3 +1,5 @@
+import { useGameLogic } from '../hooks/useGameLogic'
+
 const HoverBox = ({
   setCurrentHoveredColumn,
   addCircleToColumn,

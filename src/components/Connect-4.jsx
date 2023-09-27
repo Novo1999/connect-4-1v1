@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import HoverBox from './HoverBox'
 import { PlayerContext } from '../App'
 import Modal from './Modal'
@@ -12,21 +12,8 @@ const Connect4 = () => {
     setCurrentHoveredColumn,
     currentHoverColor,
     addCircleToColumn,
-    wholeConnectFour,
     connectFour,
   } = useGameLogic()
-
-  // dynamically creating the circles in the connect four
-  connectFour.map(item1 => {
-    const match = wholeConnectFour.find(
-      item2 => item2.colorNum === item1.colorNum
-    )
-    if (match) {
-      item1.color = match.color
-    }
-  })
-
-  // console.log(connectFour)
 
   return (
     <div className='relative flex items-center justify-center'>

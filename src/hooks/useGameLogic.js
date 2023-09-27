@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { PlayerContext } from '../App'
 import {
   col1,
@@ -58,6 +58,19 @@ import {
   diagonalWin24,
 } from '../utils/constant'
 
+function areAllItemsSame(arr, winnerSetter, player) {
+  const firstItem = arr[0]
+
+  if (arr.length === 0 || arr.length === 1) return false
+
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] !== firstItem) {
+      return false
+    }
+  }
+  winnerSetter(player === 2 ? 1 : 2)
+}
+
 export function useGameLogic() {
   const { currentPlayer, setCurrentPlayer, winner, setWinner } =
     useContext(PlayerContext)
@@ -67,8 +80,13 @@ export function useGameLogic() {
 
   const [totalColor, setTotalColor] = useState({ red: 0, yellow: 0 })
 
-  // creating the board
-  let connectFour = Array.from({ length: 42 }, (_, i) => i + 1).map(item => {
+  // const [connectFour, setConnectFour] = useState(
+  //   Array.from({ length: 42 }, (_, i) => i + 1).map(item => {
+  //     return { colorNum: item, color: 'bg-slate-700' }
+  //   })
+  // )
+
+  const connectFour = Array.from({ length: 42 }, (_, i) => i + 1).map(item => {
     return { colorNum: item, color: 'bg-slate-700' }
   })
 
@@ -92,20 +110,17 @@ export function useGameLogic() {
     ...column7,
   ]
 
-  function areAllItemsSame(arr) {
-    const firstItem = arr[0]
-
-    if (arr.length === 0 || arr.length === 1) return false
-
-    for (let i = 1; i < arr.length; i++) {
-      if (arr[i] !== firstItem) {
-        return false
-      }
+  // changing color when current player switches
+  useEffect(() => {
+    if (currentPlayer === 1) {
+      setCurrentHoverColor('hover:bg-red-600')
     }
-    setWinner(currentPlayer === 2 ? 1 : 2)
-  }
+    if (currentPlayer === 2) {
+      setCurrentHoverColor('hover:bg-yellow-600')
+    }
+  }, [currentPlayer])
 
-  // checking row wins
+  // checking row wins and diagonal wins
   useEffect(() => {
     function checkWins(row) {
       let matchedRow
@@ -118,7 +133,7 @@ export function useGameLogic() {
           return match ? match.color : null
         })
       }
-      return areAllItemsSame(matchedRow || [])
+      return areAllItemsSame(matchedRow || [], setWinner, currentPlayer)
     }
     checkWins(rowWin1)
     checkWins(rowWin2)
@@ -168,11 +183,7 @@ export function useGameLogic() {
     checkWins(diagonalWin22)
     checkWins(diagonalWin23)
     checkWins(diagonalWin24)
-  }, [currentPlayer, setWinner])
-
-  // const result = rowWin21.every(val => colorNums.includes(val))
-
-  console.log(winner)
+  }, [currentPlayer, setWinner, wholeConnectFour])
 
   // adding which column is full
   function addToCurrentFilledColumns(columnNum) {
@@ -206,17 +217,8 @@ export function useGameLogic() {
     })
   }
 
-  // determining the winner
-  useEffect(() => {
-    if (totalColor.red === 4) {
-      setWinner(1)
-    }
-    if (totalColor.yellow === 4) {
-      setWinner(2)
-    }
-  }, [setWinner, totalColor])
-
   // counting how many colors in the columns are same
+  // checking column wins
   useEffect(() => {
     function totalColorCounter(currentHovered, column) {
       if (currentHoveredColumn === currentHovered) {
@@ -254,15 +256,15 @@ export function useGameLogic() {
     currentHoveredColumn,
   ])
 
-  // changing color when current player switches
+  // determining the winner
   useEffect(() => {
-    if (currentPlayer === 1) {
-      setCurrentHoverColor('hover:bg-red-600')
+    if (totalColor.red === 4) {
+      setWinner(1)
     }
-    if (currentPlayer === 2) {
-      setCurrentHoverColor('hover:bg-yellow-600')
+    if (totalColor.yellow === 4) {
+      setWinner(2)
     }
-  }, [currentPlayer])
+  }, [setWinner, totalColor])
 
   // circle adding functionality
   function addCircleToColumn(currentHovered) {
@@ -316,21 +318,32 @@ export function useGameLogic() {
     }
   }
 
+  const connectFourCopy = [...connectFour]
+  connectFourCopy.map(item1 => {
+    const match = wholeConnectFour.find(
+      item2 => item2.colorNum === item1.colorNum
+    )
+    if (match) {
+      item1.color = match.color
+    }
+  })
+  useEffect(() => {
+    if (winner) {
+      setColumn1([])
+      setColumn2([])
+      setColumn3([])
+      setColumn4([])
+      setColumn5([])
+      setColumn6([])
+      setColumn7([])
+    }
+  }, [winner])
+
   // fix reset
   function resetAll() {
-    setColumn1([])
-    setColumn2([])
-    setColumn3([])
-    setColumn4([])
-    setColumn5([])
-    setColumn6([])
-    setColumn7([])
     setWinner(null)
-    connectFour = []
+    setCurrentPlayer(1)
   }
-
-  console.log(connectFour)
-
   return {
     currentHoveredColumn,
     setCurrentHoverColor,
