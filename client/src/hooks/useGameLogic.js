@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { PlayerContext } from '../App'
 import {
   col1,
@@ -58,7 +58,7 @@ import {
   diagonalWin24,
 } from '../utils/constant'
 
-function areAllItemsSame(arr, winnerSetter, player) {
+function allColorsAreSame(arr, winnerSetter, player) {
   const firstItem = arr[0]
 
   if (arr.length === 0 || arr.length === 1) return false
@@ -121,20 +121,21 @@ export function useGameLogic() {
   }, [currentPlayer])
 
   // checking row wins and diagonal wins
-  useEffect(() => {
-    function checkWins(row) {
-      let matchedRow
-      const matched = row.every(num =>
-        wholeConnectFour.some(item => item.colorNum === num)
-      )
-      if (matched) {
-        matchedRow = row.map(num => {
-          const match = wholeConnectFour.find(obj => obj.colorNum === num)
-          return match ? match.color : null
-        })
-      }
-      return areAllItemsSame(matchedRow || [], setWinner, currentPlayer)
+  function checkWins(row) {
+    let matchedRow
+    const matched = row.every(num =>
+      wholeConnectFour.some(item => item.colorNum === num)
+    )
+    if (matched) {
+      matchedRow = row.map(num => {
+        const match = wholeConnectFour.find(obj => obj.colorNum === num)
+        return match ? match.color : null
+      })
     }
+    return allColorsAreSame(matchedRow || [], setWinner, currentPlayer)
+  }
+
+  useEffect(() => {
     checkWins(rowWin1)
     checkWins(rowWin2)
     checkWins(rowWin3)
