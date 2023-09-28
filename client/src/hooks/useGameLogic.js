@@ -57,6 +57,7 @@ import {
   diagonalWin23,
   diagonalWin24,
 } from '../utils/constant'
+import { useGameStatus } from './useGameStatus'
 
 function allColorsAreSame(arr, winnerSetter, player) {
   const firstItem = arr[0]
@@ -79,6 +80,9 @@ export function useGameLogic() {
   const [currentFilledColumns, setCurrentFilledColumns] = useState([])
 
   const [totalColor, setTotalColor] = useState({ red: 0, yellow: 0 })
+
+  const { data } = useGameStatus()
+  console.log(data)
 
   // const [connectFour, setConnectFour] = useState(
   //   Array.from({ length: 42 }, (_, i) => i + 1).map(item => {

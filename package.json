@@ -2,7 +2,10 @@
   "name": "connect-4",
   "type": "module",
   "scripts": {
-    "start": "nodemon server"
+    "setup-project": "npm i && cd client && npm i",
+    "server": "nodemon server",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "concurrently": "^8.2.1",
