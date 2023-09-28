@@ -8,7 +8,11 @@ const PlayerSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
-  maxWaiting: Number,
+  player: Number,
+  maxPlayers: {
+    type: Number,
+    default: 2,
+  },
 })
 
 export default mongoose.model('Player', PlayerSchema)
