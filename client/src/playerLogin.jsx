@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { login } from './hooks/useLogin'
+import { login, useLogin } from './hooks/useLogin'
 
 const PlayerLogin = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false)
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(null)
+  const { data } = useLogin()
+  console.log(data)
 
   return (
     !userLoggedIn && (

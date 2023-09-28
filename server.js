@@ -7,7 +7,6 @@ import mongoose from 'mongoose'
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js'
 import { StatusCodes } from 'http-status-codes'
 import morgan from 'morgan'
-import { validateIdParam } from './middleware/validationMiddleware.js'
 const app = express()
 
 if (process.env.NODE_ENV === 'development') {

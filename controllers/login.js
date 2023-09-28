@@ -17,8 +17,8 @@ export const loginPlayer = async (req, res) => {
 
   // no more than two players are allowed to log in
 
-  if (currentPlayers >= latestPlayer[0]?.maxPlayers)
-    throw new BadRequestError('Lobby is full')
+  // if (currentPlayers >= latestPlayer[0]?.maxPlayers)
+  //   throw new BadRequestError('Lobby is full')
 
   const token = createJWT({ userId: player._id })
 

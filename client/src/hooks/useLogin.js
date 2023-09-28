@@ -1,24 +1,28 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
-export const login = async name => {
-  const data = await axios.post(
-    'api/v1/login',
-    {
-      name: name,
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json',
+export const login = async value => {
+  try {
+    const data = await axios.post(
+      'api/v1/login',
+      {
+        name: value,
       },
-    }
-  )
-  return data
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    return data
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export const useLogin = () => {
   const { data, isLoading } = useQuery({
-    queryKey: ['current-user'],
+    queryKey: ['name'],
     queryFn: login,
   })
 
