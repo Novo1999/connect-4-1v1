@@ -3,7 +3,7 @@ import Player from '../models/Player.js'
 import { StatusCodes } from 'http-status-codes'
 import { createJWT } from '../utils/tokenUtils.js'
 
-export async function loginPlayer(req, res) {
+export const loginPlayer = async (req, res) => {
   // increasing current player count
   const latestPlayer = await Player.find().sort({ _id: -1 })
 
@@ -30,5 +30,5 @@ export async function loginPlayer(req, res) {
     secure: process.env.NODE_ENV === 'production',
   })
 
-  res.status(StatusCodes.OK).json({ player })
+  res.status(StatusCodes.CREATED).json({ player })
 }

@@ -110,6 +110,8 @@ export function useGameLogic() {
     ...column7,
   ]
 
+  console.log(wholeConnectFour)
+
   // changing color when current player switches
   useEffect(() => {
     if (currentPlayer === 1) {

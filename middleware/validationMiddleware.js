@@ -1,5 +1,7 @@
-import { validationResult, body } from 'express-validator'
-import { BadRequestError } from '../errors/error-handler.js'
+import { validationResult, body, param } from 'express-validator'
+import { BadRequestError, NotFoundError } from '../errors/error-handler.js'
+import mongoose from 'mongoose'
+import Game from '../models/Game.js'
 
 const withValidationErrors = validateValues => {
   return [
@@ -22,3 +24,12 @@ export const validatePlayerName = withValidationErrors(
     .isLength({ min: 3 })
     .withMessage('Name should be at least 3 characters')
 )
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value, { req }) => {
+    const isValidMongoId = mongoose.Types.ObjectId.isValid(value)
+    if (!isValidMongoId) throw new BadRequestError('invalid request')
+    const game = await Game.findById(value)
+    if (!game) throw new NotFoundError('Game server says no')
+  }),
+])
