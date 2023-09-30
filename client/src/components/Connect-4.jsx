@@ -3,9 +3,13 @@ import HoverBox from './HoverBox'
 import { PlayerContext } from '../App'
 import Modal from './Modal'
 import { useGameLogic } from '../hooks/useGameLogic'
+import { useCreateGame } from '../hooks/useCreateGame'
+import { getGameStatus } from '../hooks/useGameStatus'
+import { sendGameMove } from '../hooks/useSendMove'
 
 const Connect4 = () => {
   const { currentPlayer, winner } = useContext(PlayerContext)
+  const { gameId } = useCreateGame()
   const {
     currentHoveredColumn,
     setCurrentHoverColor,
@@ -13,6 +17,7 @@ const Connect4 = () => {
     currentHoverColor,
     addCircleToColumn,
     connectFour,
+    wholeConnectFour,
   } = useGameLogic()
 
   return (
@@ -27,7 +32,7 @@ const Connect4 = () => {
           setCurrentHoverColor={setCurrentHoverColor}
           currentPlayer={currentPlayer}
         />
-        {connectFour.map(item => {
+        {connectFour.map((item) => {
           return (
             <div
               key={item.colorNum}

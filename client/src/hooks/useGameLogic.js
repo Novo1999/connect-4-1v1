@@ -84,8 +84,6 @@ export function useGameLogic() {
 
   const [totalColor, setTotalColor] = useState({ red: 0, yellow: 0 })
 
-  const { gameId } = useCreateGame()
-
   const { data } = useGameStatus()
   // console.log(data)
 
@@ -122,11 +120,6 @@ export function useGameLogic() {
   ]
 
   console.log(wholeConnectFour)
-
-  useEffect(() => {
-    sendGameMove(wholeConnectFour, gameId)
-    getGameStatus(gameId)
-  }, [wholeConnectFour, gameId])
 
   // changing color when current player switches
   useEffect(() => {

@@ -7,7 +7,7 @@ const PlayerLogin = () => {
   const [usersLoggedIn, setUsersLoggedIn] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const { data, isLoading } = useLogin()
-  const { mutation } = useCreateGame()
+  const { mutation, gameId } = useCreateGame()
 
   const queryClient = useQueryClient()
   useEffect(() => {
@@ -31,9 +31,7 @@ const PlayerLogin = () => {
             login(inputValue)
             setInputValue('')
             queryClient.invalidateQueries({ queryKey: ['players'] })
-            if (data?.data.length === 1) {
-              mutation.mutate()
-            }
+            mutation.mutate()
           }}
         >
           <label className='text-white text-3xl' htmlFor='login'>

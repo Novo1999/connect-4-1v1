@@ -33,6 +33,7 @@ export const useLogin = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['players'],
     queryFn: getPlayers,
+    refetchInterval: 500,
   })
   return { data, isLoading }
 }
