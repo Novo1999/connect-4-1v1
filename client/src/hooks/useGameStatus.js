@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
-export const getGameStatus = async () => {
+export const getGameStatus = async (id) => {
   try {
-    const data = await axios.get('api/v1/game-status/65158d087fddb958ebd1da7c')
+    const data = await axios.get(`api/v1/game-status/${id}`)
     return data
   } catch (error) {
     console.log(error)

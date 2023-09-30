@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { PlayerContext } from '../App'
+import axios from 'axios'
 import {
   col1,
   col2,
@@ -57,7 +58,9 @@ import {
   diagonalWin23,
   diagonalWin24,
 } from '../utils/constant'
-import { useGameStatus } from './useGameStatus'
+import { getGameStatus, useGameStatus } from './useGameStatus'
+import { sendGameMove } from './useSendMove'
+import { useCreateGame } from './useCreateGame'
 
 function allColorsAreSame(arr, winnerSetter, player) {
   const firstItem = arr[0]
@@ -81,8 +84,10 @@ export function useGameLogic() {
 
   const [totalColor, setTotalColor] = useState({ red: 0, yellow: 0 })
 
+  const { gameId } = useCreateGame()
+
   const { data } = useGameStatus()
-  console.log(data)
+  // console.log(data)
 
   // const [connectFour, setConnectFour] = useState(
   //   Array.from({ length: 42 }, (_, i) => i + 1).map(item => {
@@ -90,9 +95,11 @@ export function useGameLogic() {
   //   })
   // )
 
-  const connectFour = Array.from({ length: 42 }, (_, i) => i + 1).map(item => {
-    return { colorNum: item, color: 'bg-slate-700' }
-  })
+  const connectFour = Array.from({ length: 42 }, (_, i) => i + 1).map(
+    (item) => {
+      return { colorNum: item, color: 'bg-slate-700' }
+    }
+  )
 
   // filling the columns based on clicks
   const [column1, setColumn1] = useState([])
@@ -116,6 +123,11 @@ export function useGameLogic() {
 
   console.log(wholeConnectFour)
 
+  useEffect(() => {
+    sendGameMove(wholeConnectFour, gameId)
+    getGameStatus(gameId)
+  }, [wholeConnectFour, gameId])
+
   // changing color when current player switches
   useEffect(() => {
     if (currentPlayer === 1) {
@@ -129,12 +141,12 @@ export function useGameLogic() {
   // checking row wins and diagonal wins
   function checkWins(row) {
     let matchedRow
-    const matched = row.every(num =>
-      wholeConnectFour.some(item => item.colorNum === num)
+    const matched = row.every((num) =>
+      wholeConnectFour.some((item) => item.colorNum === num)
     )
     if (matched) {
-      matchedRow = row.map(num => {
-        const match = wholeConnectFour.find(obj => obj.colorNum === num)
+      matchedRow = row.map((num) => {
+        const match = wholeConnectFour.find((obj) => obj.colorNum === num)
         return match ? match.color : null
       })
     }
@@ -211,8 +223,8 @@ export function useGameLogic() {
   // check if any column already full
 
   function currentColumn(referenceColumn, newColumn, columnSetter) {
-    referenceColumn.map(item => {
-      if (!newColumn.map(el => el.colorNum).includes(item)) {
+    referenceColumn.map((item) => {
+      if (!newColumn.map((el) => el.colorNum).includes(item)) {
         const newColumnCopy = [...newColumn]
         newColumnCopy.push({
           columnNum: currentHoveredColumn,
@@ -326,9 +338,9 @@ export function useGameLogic() {
   }
 
   const connectFourCopy = [...connectFour]
-  connectFourCopy.map(item1 => {
+  connectFourCopy.map((item1) => {
     const match = wholeConnectFour.find(
-      item2 => item2.colorNum === item1.colorNum
+      (item2) => item2.colorNum === item1.colorNum
     )
     if (match) {
       item1.color = match.color

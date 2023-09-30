@@ -9,16 +9,16 @@ export const loginPlayer = async (req, res) => {
 
   const currentPlayers = latestPlayer[0]?.currentPlayers || 0
 
+  // no more than two players are allowed to log in
+  if (currentPlayers >= latestPlayer[0]?.maxPlayers) {
+    throw new BadRequestError('Lobby is full')
+  }
+
   const player = await Player.create({
     ...req.body,
     currentPlayers: currentPlayers + 1,
     player: currentPlayers + 1,
   })
-
-  // no more than two players are allowed to log in
-
-  // if (currentPlayers >= latestPlayer[0]?.maxPlayers)
-  //   throw new BadRequestError('Lobby is full')
 
   const token = createJWT({ userId: player._id })
 
@@ -30,5 +30,10 @@ export const loginPlayer = async (req, res) => {
     secure: process.env.NODE_ENV === 'production',
   })
 
-  res.status(StatusCodes.CREATED).json({ player })
+  res.status(StatusCodes.CREATED).json(player)
+}
+
+export const getPlayerStats = async (req, res) => {
+  const players = await Player.find({})
+  res.status(StatusCodes.OK).json(players)
 }

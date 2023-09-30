@@ -7,16 +7,19 @@ import mongoose from 'mongoose'
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js'
 import { StatusCodes } from 'http-status-codes'
 import morgan from 'morgan'
+import cookieParser from 'cookie-parser'
+import { authenticateUser } from './middleware/authMiddleware.js'
 const app = express()
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
+app.use(cookieParser())
 app.use(express.json())
 
 app.use('/api/v1', loginRouter)
-app.use('/api/v1', gameRouter)
+app.use('/api/v1', authenticateUser, gameRouter)
 
 app.use('*', (req, res) => {
   res.status(StatusCodes.NOT_FOUND).json({ msg: 'not found' })
